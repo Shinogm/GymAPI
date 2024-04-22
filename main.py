@@ -2,11 +2,15 @@ from app.services.fastapi import App
 from fastapi.responses import StreamingResponse
 from datetime import datetime
 import asyncio
+from app.routers.router import users, memberships, perms, clients
 
 def main():
     app = App(
     routers=[
-        #users.router,
+        users.router,
+        clients.router,
+        memberships.router,
+        perms.router
 
     ],
     ).get_app()
