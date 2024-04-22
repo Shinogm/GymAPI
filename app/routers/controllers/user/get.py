@@ -51,7 +51,7 @@ async def get_user(user_id: int):
                 JOIN permissions p ON u.permission_id = p.id
                 WHERE u.id = %s
                 ''',
-                params=(user_id)
+                params=(user_id,)
             )
     
             if not get_user:

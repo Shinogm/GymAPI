@@ -9,7 +9,7 @@ async def modify_user(user_id: int | None = None, user: ModifyUser = Depends(Mod
         
         get_user = gym_db.fetch_one(
             sql='SELECT * FROM worker_admins WHERE id = %s',
-            params=(user_id)
+            params=(user_id,)
         )
 
         if not get_user:
@@ -26,19 +26,17 @@ async def modify_user(user_id: int | None = None, user: ModifyUser = Depends(Mod
                 user.name if user.name is not None else get_user['name'],
                 user.last_name if user.last_name is not None else get_user['lastname'],
                 user.email if user.email is not None else get_user['email'],
-                bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt()),
-                user_id
+                bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt()) if user.password is not None else get_user['password'],
+                user_id,
             )
         )
 
-        if not update_user:
-            raise HTTPException(status_code=500, detail='Error updating user')
-        
+
     except Exception as e:
         print(e)
         raise HTTPException(
             status_code=500, 
-            detail='Error updating user'
+            detail='Error updating user2'
         )
     
     return {
@@ -46,42 +44,47 @@ async def modify_user(user_id: int | None = None, user: ModifyUser = Depends(Mod
         'message': 'User updated successfully',
         'data': get_user,
         'new_data': {
-            'name': user.name if user.name is not None else get_user['name'],
-            'lastname': user.last_name if user.last_name is not None else get_user['lastname'],
-            'email': user.email if user.email is not None else get_user['email']
+            'name': user.name if user.name is not None else '',
+            'lastname': user.last_name if user.last_name is not None else '',
+            'email': user.email if user.email is not None else ''
         }
     }
 
-async def modify_user_permission(user_id: int | None = None, perm_id: int | None = None):
+async def modify_user_permission(user_id: int, perm_id: int ):
     
     try:
         
         get_user = gym_db.fetch_one(
             sql='SELECT * FROM worker_admins WHERE id = %s',
-            params=(user_id)
+            params=(user_id,)
         )
 
         if not get_user:
             raise HTTPException(status_code=404, detail='User not found')
         
         update_user = gym_db.execute(
-            sql='UPDATE worker_admins SET permission_id = %s WHERE id = %s',
+            sql=
+            '''
+            UPDATE worker_admins
+            SET permission_id = %s
+            WHERE id = %s 
+            ''',
             params=(perm_id, user_id)
         )
 
         if not update_user:
-            raise HTTPException(status_code=500, detail='Error updating user')
+            raise HTTPException(status_code=500, detail='Error updating user2')
         
         permission_name = gym_db.fetch_one(
             sql='SELECT name FROM permissions WHERE id = %s',
-            params=(perm_id)
+            params=(perm_id,)
         )
-        
+
     except Exception as e:
         print(e)
         raise HTTPException(
             status_code=500, 
-            detail='Error updating user'
+            detail='Error updating user1'
         )
     
     return {

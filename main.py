@@ -8,7 +8,7 @@ def main():
     app = App(
     routers=[
         users.router,
-        clients.router,
+        #clients.router,
         memberships.router,
         perms.router
 

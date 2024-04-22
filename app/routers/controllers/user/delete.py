@@ -6,7 +6,7 @@ async def delete_user(user_id: int):
     try:
         get_user = gym_db.fetch_one(
             sql='SELECT * FROM worker_admins WHERE id = %s',
-            params=(user_id)
+            params=(user_id,)
         )
 
         if not get_user:
@@ -14,11 +14,9 @@ async def delete_user(user_id: int):
         
         delete_user = gym_db.execute(
             sql='DELETE FROM worker_admins WHERE id = %s',
-            params=(user_id)
+            params=(user_id,)
         )
 
-        if not delete_user:
-            raise HTTPException(status_code=500, detail='Error deleting user')
         
     except Exception as e:
         print(e)
@@ -30,5 +28,6 @@ async def delete_user(user_id: int):
     return {
         'status': 'success',
         'message': 'User deleted successfully',
-        'data': get_user
+        'data': get_user,
+        'deleted': delete_user
     }
