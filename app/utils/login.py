@@ -12,8 +12,10 @@ def verify_password( email: str, password: str):
     user_db_all = gym_db.fetch_one(
         sql='''
         SELECT id,
-          created_at, name,
-            domicilio, telefono,
+          created_at, 
+          name,
+            domicilio, 
+            telefono,
               empresa,
                 email FROM users WHERE email = %s
               ''',
