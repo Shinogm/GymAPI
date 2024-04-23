@@ -29,7 +29,7 @@ async def get_permission(perm_id: int):
             try:
                 get_permission = gym_db.fetch_one(
                     sql='SELECT * FROM permissions WHERE id = %s',
-                    params=(perm_id)
+                    params=(perm_id,)
                 )
         
                 if not get_permission:

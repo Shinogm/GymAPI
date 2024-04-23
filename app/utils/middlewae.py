@@ -1,4 +1,8 @@
-from fastapi import Request, Response
+from fastapi import Request, Response, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from .login import verify_password
+from app.routers.controllers.user import create
+from app.services.db import gym_db
 
 # Definimos una función middleware
 async def custom_middleware(request: Request, call_next):

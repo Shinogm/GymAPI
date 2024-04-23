@@ -3,7 +3,7 @@ from fastapi import HTTPException
 
 def verify_password( email: str, password: str):
     user_db = gym_db.fetch_one(
-        sql='SELECT * FROM users WHERE email = %s',
+        sql='SELECT * FROM worker_admins WHERE email = %s',
         params=(email,)
     )
     if not user_db:
@@ -14,13 +14,13 @@ def verify_password( email: str, password: str):
         SELECT id,
           created_at, 
           name,
-            domicilio, 
-            telefono,
-              empresa,
-                email FROM users WHERE email = %s
+          lastname,
+            permission_id,
+                email FROM worker_admins WHERE email = %s
               ''',
         params=(email,)
     )
+    
     try:
         import bcrypt
         if bcrypt.checkpw(password.encode('utf-8'), user_db['password'].encode('utf-8')):

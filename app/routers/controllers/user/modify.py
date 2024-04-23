@@ -52,8 +52,8 @@ async def modify_user(user_id: int | None = None, user: ModifyUser = Depends(Mod
 
 async def modify_user_permission(user_id: int, perm_id: int ):
     
-    try:
-        
+        if perm_id not in [1, 2, 3]:
+            raise HTTPException(status_code=404, detail='Permission not found')
         get_user = gym_db.fetch_one(
             sql='SELECT * FROM worker_admins WHERE id = %s',
             params=(user_id,)
@@ -62,36 +62,41 @@ async def modify_user_permission(user_id: int, perm_id: int ):
         if not get_user:
             raise HTTPException(status_code=404, detail='User not found')
         
-        update_user = gym_db.execute(
-            sql=
-            '''
-            UPDATE worker_admins
-            SET permission_id = %s
-            WHERE id = %s 
-            ''',
-            params=(perm_id, user_id)
-        )
+        if get_user['permission_id'] == perm_id:
+            return {
+                'status': 'success',
+                'message': 'User already has this permission',
+                'data': get_user,
+                'new_data': {
+                    'permission': get_user['permission_id']
+                }
+            }
+        else:
+            update_user = gym_db.update(
+                table='worker_admins',
+                data={
+                    'permission_id': perm_id
+                },
+                where=str(user_id),
+            )
+            
+            permission_name = gym_db.fetch_one(
+                sql='SELECT name FROM permissions WHERE id = %s',
+                params=(perm_id,)
+            )
+            get_user_new = gym_db.fetch_one(
+                sql='SELECT * FROM worker_admins WHERE id = %s',
+                params=(user_id,)
+            )
+            if not permission_name:
+                raise HTTPException(status_code=404, detail='Permission not found')
 
-        if not update_user:
-            raise HTTPException(status_code=500, detail='Error updating user2')
-        
-        permission_name = gym_db.fetch_one(
-            sql='SELECT name FROM permissions WHERE id = %s',
-            params=(perm_id,)
-        )
 
-    except Exception as e:
-        print(e)
-        raise HTTPException(
-            status_code=500, 
-            detail='Error updating user1'
-        )
-    
-    return {
-        'status': 'success',
-        'message': 'User updated successfully',
-        'data': get_user,
-        'new_data': {
-            'permission': permission_name['name']
-        }
-    }
+            return {
+                'status': 'success',
+                'message': 'User updated successfully',
+                'data': get_user_new,
+                'new_data': {
+                    'permission': permission_name['name']
+                }
+            }
