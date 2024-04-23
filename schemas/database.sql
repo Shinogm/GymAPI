@@ -1,4 +1,4 @@
--- Active: 1696921476499@@127.0.0.1@3306@gym_db
+-- Active: 1695837029838@@127.0.0.1@3306@
 DROP DATABASE IF EXISTS gym_db;
 
 CREATE DATABASE gym_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -44,7 +44,8 @@ CREATE TABLE is_membership (
     code_membership INT(6) AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     client_id INT NOT NULL,
-    have_membership_id TINYINT(1) NOT NULL,
+    have_membership_id TINYINT(1) NOT NULL DEFAULT 0,
+    expiration_date DATE,
     FOREIGN KEY (client_id) REFERENCES clients(id),
     UNIQUE KEY (code_membership)
 );

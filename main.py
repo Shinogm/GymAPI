@@ -3,7 +3,7 @@ from fastapi.responses import StreamingResponse
 from datetime import datetime
 import asyncio
 from app.routers.router import users, memberships, perms, clients
-
+from app.utils.middlewae import custom_middleware
 def main():
     app = App(
     routers=[
@@ -18,6 +18,8 @@ def main():
     return app
 if __name__ == '__main__':
     app = main()
+
+    app.middleware('http')(custom_middleware)
 
     @app.get('/')
     async def home():

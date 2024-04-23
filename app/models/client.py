@@ -14,13 +14,13 @@ class Client(BaseModel):
         last_name: Annotated[str, Form(...)],
         email: Annotated[str, Form(...)]
     ):
-        
+
         return cls(
             name=name,
             last_name=last_name,
             email=email
         )
-    
+
 class ModifyClient(BaseModel):
     name: str | None = None
     last_name: str | None = None
@@ -33,7 +33,7 @@ class ModifyClient(BaseModel):
         last_name: Annotated[str | None, Form(...)] = None,
         email: Annotated[str | None, Form(...)] = None
     ):
-        
+
         return cls(
             name=name,
             last_name=last_name,
