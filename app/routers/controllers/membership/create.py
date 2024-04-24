@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from app.services.db import gym_db
 from datetime import datetime, timedelta
 
-async def have_membership(client_id: int):
+async def have_membership(client_id: int, membership_month: int = 30):
 
         get_client = gym_db.fetch_one(
             sql='SELECT * FROM clients WHERE id = %s',
@@ -20,7 +20,7 @@ async def have_membership(client_id: int):
         if client_membership is None:
 
             membership_id = 1
-            expiration_date = datetime.now() + timedelta(days=30)
+            expiration_date = datetime.now() + timedelta(days=membership_month)
 
             put_membership = gym_db.execute(
                 sql='INSERT INTO is_membership (client_id, have_membership_id, expiration_date) VALUES (%s, %s, %s)',

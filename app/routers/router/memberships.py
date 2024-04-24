@@ -9,4 +9,6 @@ router.get('/membership/get')(get.get_all_clients_memeberships)
 router.get('/membership/get/{client_id}')(get.get_all_client_membership)
 router.get('/membership/entry/{membership_code}')(entry.get_all_clients_memeberships)
 router.get('/membership/check/{code}')(time.check_all_membership_is_out_code)
+#router.put('/membership/quit/{client_id}')(delete.quit_temporaly_membership)
 router.delete('/membership/delete/{client_id}')(delete.delete_membership)
+

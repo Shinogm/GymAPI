@@ -81,7 +81,7 @@ async def check_all_membership_is_out_code(code: int):
             )
             
         return {
-                "message": "All memberships",
+                "message": "verified membership by codeS",
                 "memberships": client_db,
                 "response": response
             }
