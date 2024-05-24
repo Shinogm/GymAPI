@@ -36,7 +36,7 @@ async def comparar_fechas_y_calcular_dias_restantes(fecha_expiracion: str):
     
 async def check_all_membership_is_out():
     try:
-        # Check all memberships
+        all_clients_data = []  # Lista para almacenar datos de todos los clientes
         all_memberships = gym_db.fetch_all(
             sql='SELECT * FROM is_membership'
         )
@@ -44,18 +44,24 @@ async def check_all_membership_is_out():
             raise HTTPException(status_code=404, detail='Memberships not found')
         
         for membership in all_memberships:
+            client_data = {}
             print(membership['expiration_date'])
             response = await comparar_fechas_y_calcular_dias_restantes(str(membership['expiration_date']))
+            client_data['membership'] = membership
+            client_data['response'] = response
+            # Obtener datos del cliente
             client_db = gym_db.fetch_one(
                 sql='SELECT * FROM clients WHERE id = %s',
                 params=(membership['client_id'],)
             )
-            
+            client_data['client'] = client_db
+            all_clients_data.append(client_data)
+
         return {
-                "message": "All memberships",
-                "memberships": client_db,
-                "response": response
-            }
+            "message": "All memberships",
+            "memberships": all_clients_data
+        }
+
 
 
     except Exception as e:

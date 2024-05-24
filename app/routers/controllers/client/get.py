@@ -32,3 +32,20 @@ async def get_all_clients(client_id: int | None = None):
             status_code=500,
             detail='Error getting clients'
         )
+
+async def get_all_clients_with_no_membership():
+    try:
+        get_clients = gym_db.fetch_all(
+            sql='SELECT * FROM clients WHERE id NOT IN (SELECT client_id FROM is_membership)'
+        )
+        return {
+            'status': 'success',
+            'message': 'All clients with no membership',
+            'data': get_clients
+        }
+    except Exception as e:
+        print(e)
+        raise HTTPException(
+            status_code=500,
+            detail='Error getting clients'
+        )
