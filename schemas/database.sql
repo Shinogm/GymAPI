@@ -1,4 +1,4 @@
--- Active: 1696921476499@@127.0.0.1@3306@gym_db
+-- Active: 1715043174887@@127.0.0.1@3306@gym_db
 DROP DATABASE IF EXISTS gym_db;
 
 CREATE DATABASE gym_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -25,7 +25,7 @@ CREATE TABLE worker_admins (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     permission_id INT NOT NULL,
-    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON,
+    FOREIGN KEY (permission_id) REFERENCES permissions(id),
     UNIQUE KEY (email)
 );
 
