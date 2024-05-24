@@ -25,7 +25,7 @@ CREATE TABLE worker_admins (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     permission_id INT NOT NULL,
-    FOREIGN KEY (permission_id) REFERENCES permissions(id),
+    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON,
     UNIQUE KEY (email)
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE is_membership (
     client_id INT NOT NULL,
     have_membership_id TINYINT(1) NOT NULL DEFAULT 0,
     expiration_date DATE,
-    FOREIGN KEY (client_id) REFERENCES clients(id)
+    FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
 );
 
 DELIMITER $$

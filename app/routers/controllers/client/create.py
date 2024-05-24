@@ -18,7 +18,8 @@ async def create_client(client: Client = Depends(Client.as_form)):
     return {
         'status': 'success',
         'message': 'Client created successfully',
-        'data': {
+        'client': {
+            'id': create_client,
             'name': client.name,
             'last_name': client.last_name,
             'email': client.email

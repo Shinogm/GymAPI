@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from app.services.db import gym_db
 
-async def delete_client(client_id: int | None = None):
+async def delete_client(client_id: int):
     try:
         delete_client = gym_db.execute(
             sql='DELETE FROM clients WHERE id = %s',
